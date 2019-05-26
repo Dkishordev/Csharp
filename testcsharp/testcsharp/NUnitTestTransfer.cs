@@ -5,39 +5,51 @@ namespace testcsharp
     [TestFixture()]
     public class MainClassTest
     {
+        string today = DateTime.Now.ToString("yyyy-MM-dd");
+        TestDataUtils testdata = new TestDataUtils();
         [Test]
         //Case1= already transfered >= maxlimit returns failure
-        public void Case1()
+        public void SendAmount_GT_MaxLimit()
         {
-            //Arrange
-            var obj = new MainClass();
-            //Act
-            var result = obj.Transfer(10001, 10002, 2000);
-            //Assert
+            testdata.TruncateTable("Account");
+            testdata.TruncateTable("Transfer");
+            testdata.InsertData_Account(10001, 20000);
+            testdata.InsertData_Account(10002, 10000);
+            testdata.InsertData_Transfer(10001, 10002, 100000, today);
+
+            var test = new BalanceTransaction();
+
+            var result = test.Transfer(10001, 10002, 100000);
+
             Assert.AreEqual("Failure", result);
         }
 
         [Test]
-        //Case2= already transfered <= maxlimit and remainingbalance >= minbalance returns success
-        public void Case2()
+        //Case2 = sender balance doesnt have enough balance to transfer
+        public void SenderBalance_LT_TransferAmount()
         {
-            //Arrange
-            var obj = new MainClass();
-            //Act
-            var result = obj.Transfer(10001, 10002, 2000);
-            //Assert
-            Assert.AreEqual("Success", result);
+            testdata.TruncateTable("Account");
+            testdata.TruncateTable("Transfer");
+            testdata.InsertData_Account(10001, 30000);
+            var test = new BalanceTransaction();
+
+            var result = test.Transfer(10001, 10002, 35000);
+
+            Assert.AreEqual("Failure", result);
+
         }
 
         [Test]
-        //Case3 = (already transfered <= maxlimit and remainingbalance >= minbalance returns success) 
-        // and amount <=remainingtransfer limit
-        public void Case3()
+        //case3: sender sends 0 or negative balance
+        public void Sender_Sends_Neg_Or_Zero_Balance()
         {
-            var obj = new MainClass();
-            var result = obj.Transfer(10001, 10002, 2000);
-            Assert.AreEqual("Success", result);
-                     
+            var test = new BalanceTransaction();
+
+            var result = test.Transfer(10001, 10002, 0);
+            var result1 = test.Transfer(10001, 10002, -1000);
+
+            Assert.AreEqual("Failure", result);
+            Assert.AreEqual("Failure", result1);
         }
     }
 }

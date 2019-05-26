@@ -8,3 +8,13 @@
 /home/kishor/Projects/testcsharp/testcsharp/obj/x86/Debug/testcsharp.csproj.CoreCompileInputs.cache
 /home/kishor/Projects/testcsharp/testcsharp/obj/x86/Debug/testcsharp.exe
 /home/kishor/Projects/testcsharp/testcsharp/obj/x86/Debug/testcsharp.pdb
+/home/kishor/Projects/Csharp/testcsharp/testcsharp/bin/Debug/testcsharp.exe
+/home/kishor/Projects/Csharp/testcsharp/testcsharp/bin/Debug/testcsharp.pdb
+/home/kishor/Projects/Csharp/testcsharp/testcsharp/bin/Debug/BouncyCastle.Crypto.dll
+/home/kishor/Projects/Csharp/testcsharp/testcsharp/bin/Debug/Google.Protobuf.dll
+/home/kishor/Projects/Csharp/testcsharp/testcsharp/bin/Debug/MySql.Data.dll
+/home/kishor/Projects/Csharp/testcsharp/testcsharp/bin/Debug/Google.Protobuf.xml
+/home/kishor/Projects/Csharp/testcsharp/testcsharp/bin/Debug/MySql.Data.xml
+/home/kishor/Projects/Csharp/testcsharp/testcsharp/obj/x86/Debug/testcsharp.csproj.CoreCompileInputs.cache
+/home/kishor/Projects/Csharp/testcsharp/testcsharp/obj/x86/Debug/testcsharp.exe
+/home/kishor/Projects/Csharp/testcsharp/testcsharp/obj/x86/Debug/testcsharp.pdb

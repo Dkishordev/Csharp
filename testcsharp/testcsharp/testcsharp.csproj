@@ -58,9 +58,9 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DBUtils.cs" />
-    <Compile Include="Updatebalance.cs" />
-    <Compile Include="Getbalance.cs" />
+    <Compile Include="Balance.cs" />
     <Compile Include="NUnitTestTransfer.cs" />
+    <Compile Include="TestDataUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

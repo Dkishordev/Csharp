@@ -9,25 +9,25 @@ using MySql.Data.MySqlClient;
 
 namespace testcsharp
 {
-    class MainClass
+    class BalanceTransaction
     {
-        public string transaction_status;
         private const float maxlimit = 100000, minbalance = 5000;
-        public float check_balance,rembalance, already_transfered;
+        public float getbalance,rembalance, already_transfered;
 
         public string Transfer(int from, int to, int amount)
         {
           
-            if(amount > maxlimit && amount <= 0) return "Failure";
+            if(amount > maxlimit || amount <= 0) 
+                return "Failure";
 
-            Getbalance balance = new Getbalance();
-             check_balance = balance.CheckBalance(from);
+            Balance balance = new Balance();
+             getbalance = balance.GetBalance(from);
             already_transfered = balance.GetAlreadyTransfered(from);
             //already_transfered = 110000;
-            rembalance = check_balance - amount;
+            rembalance = getbalance - amount;
 
             if (already_transfered>=maxlimit)
-                transaction_status= "Failure";
+                return "Failure";
             
             if(already_transfered<maxlimit && rembalance>=minbalance)
             {
@@ -35,29 +35,27 @@ namespace testcsharp
                 if (amount <= remaining_transfer_limit)
                 {
                     //update balance of sender and receiver account
-                    Updatebalance balanceupdate = new Updatebalance();
-                    balanceupdate.Balance_sub(from, to, amount);
-                    balanceupdate.Balance_add(from, to, amount);
+                    balance.Balance_sub(from, to, amount);
+                    balance.Balance_add(from, to, amount);
 
                     //add transaction in Transfer table
-                    balanceupdate.Addtransaction(from, to, amount);
-                    transaction_status = "Success"; 
+                    balance.Addtransaction(from, to, amount);
+                    return "Success"; 
                 }
                     
                 else
-                    transaction_status= "Failure";
+                    return "Failure";
             }
             else
-                transaction_status = "Failure";
+                return "Failure";
             
-            return transaction_status; 
         }
 
 
         public static void Main()
         {
-            MainClass transfer = new MainClass();
-            Console.WriteLine(transfer.Transfer(10002, 10001, 2000));
+            BalanceTransaction transfer = new BalanceTransaction();
+            Console.WriteLine(transfer.Transfer(10002, 10001, 1000));
         }
     }
 }
