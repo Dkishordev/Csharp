@@ -1,0 +1,21 @@
+﻿<Properties StartupConfiguration="{6133F676-DC62-47E3-BFBF-E3998E075CC0}|Default">
+  <MonoDevelop.Ide.Workbench ActiveDocument="testcsharp/Getbalance.cs">
+    <Files>
+      <File FileName="testcsharp/DBUtils.cs" Line="24" Column="10" />
+      <File FileName="testcsharp/Updatebalance.cs" Line="15" Column="1" />
+      <File FileName="testcsharp/Getbalance.cs" Line="14" Column="10" />
+      <File FileName="testcsharp/Program.cs" Line="21" Column="48" />
+      <File FileName="testcsharp/NUnitTestTransfer.cs" Line="12" Column="22" />
+      <File FileName="testcsharp/packages.config" Line="1" Column="1" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore>
+      <Breakpoint file="/home/kishor/Projects/testcsharp/testcsharp/Program.cs" relfile="testcsharp/Program.cs" line="20" column="1" />
+    </BreakpointStore>
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.ItemProperties.testcsharp PreferredExecutionTarget="MonoDevelop.Default" />
+  <MultiItemStartupConfigurations />
+</Properties>
