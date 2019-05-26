@@ -23,7 +23,7 @@ namespace testcsharp
                 reader = cmd.ExecuteReader();
                 while (reader.Read())
                 {
-                     balance = Convert.ToInt32(reader["Balance"]);
+                    balance = Convert.ToInt32(reader["Balance"]);
                 }
                 conn.Close();
                 return balance;

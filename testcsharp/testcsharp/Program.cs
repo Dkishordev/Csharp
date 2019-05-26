@@ -12,7 +12,6 @@ namespace testcsharp
     class BalanceTransaction
     {
         private const float maxlimit = 100000, minbalance = 5000;
-        public float getbalance,rembalance, already_transfered;
 
         public string Transfer(int from, int to, int amount)
         {
@@ -21,10 +20,13 @@ namespace testcsharp
                 return "Failure";
 
             Balance balance = new Balance();
-             getbalance = balance.GetBalance(from);
-            already_transfered = balance.GetAlreadyTransfered(from);
-            //already_transfered = 110000;
-            rembalance = getbalance - amount;
+            float getbalance = balance.GetBalance(from);
+
+            //get already transfered balance on present day
+            float already_transfered = balance.GetAlreadyTransfered(from);
+
+            //remaining balance of sender after sending amount.
+            float rembalance = getbalance - amount;
 
             if (already_transfered>=maxlimit)
                 return "Failure";
