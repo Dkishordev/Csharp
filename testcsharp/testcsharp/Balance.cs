@@ -6,78 +6,83 @@ namespace testcsharp
 {
     public class Balance
     {
-        public float balance, already_transfered;
+        public string today = DateTime.Now.ToString("yyyy-MM-dd");
         public MySqlParameterCollection Parameters { get; }
-        public MySqlDataReader reader = null;
 
         //returns balance of the sender account
         public float GetBalance(int from)
         {
-            
-            try{
-                MySqlConnection conn = DBUtils.GetDBConnection();
-                conn.Open();
-                MySqlCommand cmd = new MySqlCommand(
-                    "select Balance from Account where AccountID=@sendfrom;", conn);
-                cmd.Parameters.AddWithValue("@sendfrom", from);
-                reader = cmd.ExecuteReader();
-                while (reader.Read())
-                {
-                    balance = Convert.ToInt32(reader["Balance"]);
-                }
-                conn.Close();
-                return balance;
+            float balance= 0;
+            object a = new object();
+
+
+
+
+            using (a) {
                 
             }
-            catch{
-                return 0;
+            using (MySqlConnection connection = DBUtils.GetDBConnection())
+            {
+                try
+                {
+                    string query = "select Balance from Account where AccountID=@sendfrom;";
+                    MySqlCommand command = new MySqlCommand(query, connection);
+                    command.Connection.Open();
+                    command.Parameters.AddWithValue("@sendfrom", from);
+                    balance = (float)command.ExecuteScalar();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
             }
+            return balance;
         }
 
         //returns per day transfered amount of sender account 
-        public float GetAlreadyTransfered(int from)
+        public double GetAlreadyTransfered(int from)
         {
-            string today = DateTime.Now.ToString("yyyy-MM-dd");
-            try{
-                MySqlConnection conn = DBUtils.GetDBConnection();
-                conn.Open();
-                MySqlCommand cmd = new MySqlCommand(
-                        "select sum(Amount) as Total from Transfer where SendFrom = @sendfrom and Date =@today;", conn);
-                cmd.Parameters.AddWithValue("@sendfrom", from);
-                cmd.Parameters.AddWithValue("@today", today);
-                reader = cmd.ExecuteReader();
-                while (reader.Read())
+            double already_transfered = 0;
+            using (MySqlConnection connection = DBUtils.GetDBConnection())
+            {
+                try
                 {
-                    already_transfered = Convert.ToInt32(reader["Total"]);
+                    string query = "select sum(Amount), SendFrom from Transfer where SendFrom =@sendfrom and Date = @today group by SendFrom;";
+                    MySqlCommand command = new MySqlCommand(query, connection);
+                    command.Connection.Open();
+                    command.Parameters.AddWithValue("@sendfrom", from);
+                    command.Parameters.AddWithValue("@today", today);
+                    already_transfered = (double)command.ExecuteScalar();
                 }
-                conn.Close();
-                return already_transfered;
-                
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
             }
-            catch{
-                return 0;
-            }
-           
+
+            return already_transfered;  
         }
+
 
         //update balance of receiver account
         public void Balance_add(int from, int to, float amount)
         {
-            try
-            {
-                MySqlConnection conn = DBUtils.GetDBConnection();
-                conn.Open();
-                MySqlCommand cmd = new MySqlCommand(
-                    "update Account set Balance = Balance + @amount where AccountID =@sendto;", conn);
-                cmd.Parameters.AddWithValue("@amount", amount);
-                cmd.Parameters.AddWithValue("@sendto", to);
-                reader = cmd.ExecuteReader();
-                conn.Close();
+            using (MySqlConnection connection = DBUtils.GetDBConnection())
+            { 
+                try{
+                    string query = "update Account set Balance = Balance + @amount where AccountID =@sendto;";
+                    MySqlCommand command = new MySqlCommand(query, connection);
+                    command.Connection.Open();
+                    command.Parameters.AddWithValue("@amount", amount);
+                    command.Parameters.AddWithValue("@sendto", to);
+                    command.ExecuteNonQuery();
+                    
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
 
-            }
-            catch
-            {
-                Console.WriteLine("Error");
             }
 
 
@@ -86,44 +91,48 @@ namespace testcsharp
         //update balance of sender account
         public void Balance_sub(int from, int to, float amount)
         {
-            try
+            using (MySqlConnection connection = DBUtils.GetDBConnection())
             {
-                MySqlConnection conn = DBUtils.GetDBConnection();
-                conn.Open();
-                MySqlCommand cmd = new MySqlCommand(
-                    "update Account set Balance = Balance - @amount where AccountID =@sendfrom;", conn);
-                cmd.Parameters.AddWithValue("@amount", amount);
-                cmd.Parameters.AddWithValue("@sendfrom", from);
-                reader = cmd.ExecuteReader();
-                conn.Close();
-            }
-            catch
-            {
-                Console.WriteLine("Error");
-            }
+                try
+                {
+                    string query = "update Account set Balance = Balance - @amount where AccountID =@sendfrom;";
+                    MySqlCommand command = new MySqlCommand(query, connection);
+                    command.Connection.Open();
+                    command.Parameters.AddWithValue("@amount", amount);
+                    command.Parameters.AddWithValue("@sendfrom", from);
+                    command.ExecuteNonQuery();
 
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+
+            }
         }
 
         //insert transaction into transfer table
         public void Addtransaction(int from, int to, float amount)
         {
-            string today = DateTime.Now.ToString("yyyy-MM-dd");
-            try
+            using (MySqlConnection connection = DBUtils.GetDBConnection())
             {
-                MySqlConnection conn = DBUtils.GetDBConnection();
-                conn.Open();
-                MySqlCommand cmd = new MySqlCommand(
-                    "insert into Transfer (SendFrom, SendTo, Amount, Date) values (@sendfrom,@sendto,@amount,@today);", conn);
-                cmd.Parameters.AddWithValue("@amount", amount);
-                cmd.Parameters.AddWithValue("@sendto", to);
-                cmd.Parameters.AddWithValue("@sendfrom", from);
-                cmd.Parameters.AddWithValue("@today", today);
-                reader = cmd.ExecuteReader();
-                conn.Close();
-            }
-            catch
-            {
-                Console.WriteLine("Error");
+                try
+                {
+                    string query = "insert into Transfer (SendFrom, SendTo, Amount, Date) values (@sendfrom,@sendto,@amount,@today);";
+                    MySqlCommand command = new MySqlCommand(query, connection);
+                    command.Connection.Open();
+                    command.Parameters.AddWithValue("@amount", amount);
+                    command.Parameters.AddWithValue("@sendto", to);
+                    command.Parameters.AddWithValue("@sendfrom", from);
+                    command.Parameters.AddWithValue("@today", today);
+                    command.ExecuteNonQuery();
+
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+
             }
 
 

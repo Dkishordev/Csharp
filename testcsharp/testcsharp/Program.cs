@@ -11,7 +11,7 @@ namespace testcsharp
 {
     class BalanceTransaction
     {
-        private const float maxlimit = 100000, minbalance = 5000;
+        private const double maxlimit = 100000, minbalance = 5000;
 
         public string Transfer(int from, int to, int amount)
         {
@@ -23,7 +23,7 @@ namespace testcsharp
             float getbalance = balance.GetBalance(from);
 
             //get already transfered balance on present day
-            float already_transfered = balance.GetAlreadyTransfered(from);
+            double already_transfered = balance.GetAlreadyTransfered(from);
 
             //remaining balance of sender after sending amount.
             float rembalance = getbalance - amount;
@@ -33,7 +33,7 @@ namespace testcsharp
             
             if(already_transfered<maxlimit && rembalance>=minbalance)
             {
-                float remaining_transfer_limit = maxlimit - already_transfered;
+                double remaining_transfer_limit = maxlimit - already_transfered;
                 if (amount <= remaining_transfer_limit)
                 {
                     //update balance of sender and receiver account
@@ -57,7 +57,7 @@ namespace testcsharp
         public static void Main()
         {
             BalanceTransaction transfer = new BalanceTransaction();
-            Console.WriteLine(transfer.Transfer(10002, 10001, 1000));
+            Console.WriteLine(transfer.Transfer(10002, 10001, 20000));
         }
     }
 }

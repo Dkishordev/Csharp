@@ -6,42 +6,71 @@ namespace testcsharp
     public class TestDataUtils
     {
         public MySqlParameterCollection Parameters { get; }
-        public MySqlDataReader reader = null;
 
         public void TruncateTable(String tablename)
         {
-            MySqlConnection conn = DBUtils.GetDBConnection();
-            conn.Open();
-            string query = "TRUNCATE TABLE " + tablename;
-            MySqlCommand cmd = new MySqlCommand(query, conn);
-            cmd.ExecuteNonQuery();
-            conn.Close();
+            using (MySqlConnection connection = DBUtils.GetDBConnection())
+            {
+                try
+                {
+                    string query = "TRUNCATE TABLE " + tablename;
+                    MySqlCommand command = new MySqlCommand(query, connection);
+                    command.Connection.Open();
+                    command.ExecuteNonQuery();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+           
         }
 
        public void InsertData_Transfer(int from, int to, float amount, string date)
         {
-            MySqlConnection conn = DBUtils.GetDBConnection();
-            conn.Open();
-            MySqlCommand cmd = new MySqlCommand(
-                "insert into Transfer (SendFrom, SendTo, Amount, Date) values (@sendfrom,@sendto,@amount,@date);", conn);
-            cmd.Parameters.AddWithValue("@amount", amount);
-            cmd.Parameters.AddWithValue("@sendto", to);
-            cmd.Parameters.AddWithValue("@sendfrom", from);
-            cmd.Parameters.AddWithValue("@date", date );
-            reader = cmd.ExecuteReader();
-            conn.Close();
+            using (MySqlConnection connection = DBUtils.GetDBConnection())
+            {
+                try
+                {
+                    string query = "insert into Transfer (SendFrom, SendTo, Amount, Date) values (@sendfrom,@sendto,@amount,@today);";
+                    MySqlCommand command = new MySqlCommand(query, connection);
+                    command.Connection.Open();
+                    command.Parameters.AddWithValue("@amount", amount);
+                    command.Parameters.AddWithValue("@sendto", to);
+                    command.Parameters.AddWithValue("@sendfrom", from);
+                    command.Parameters.AddWithValue("@today", date);
+                    command.ExecuteNonQuery();
+
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+
+            }
+
         }
 
         public void InsertData_Account(int accountid, float amount)
         {
-            MySqlConnection conn = DBUtils.GetDBConnection();
-            conn.Open();
-            MySqlCommand cmd = new MySqlCommand(
-                "insert into Account (AccountID, Balance) values (@accountid,@balance);", conn);
-            cmd.Parameters.AddWithValue("@accountid", accountid);
-            cmd.Parameters.AddWithValue("@balance", amount);
-            reader = cmd.ExecuteReader();
-            conn.Close();
+            using (MySqlConnection connection = DBUtils.GetDBConnection())
+            {
+                try
+                {
+                    string query = "insert into Account (AccountID, Balance) values (@accountid,@balance);";
+                    MySqlCommand command = new MySqlCommand(query, connection);
+                    command.Connection.Open();
+                    command.Parameters.AddWithValue("@accountid", accountid);
+                    command.Parameters.AddWithValue("@balance", amount);
+                    command.ExecuteNonQuery();
+
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+
+            }
         }
 
     }

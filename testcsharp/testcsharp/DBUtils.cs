@@ -4,23 +4,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
+using System.Configuration;  
 namespace SqlConn
 {
     public class DBUtils
     {
-        public static MySqlConnection GetDBConnection()
-        {
-            string host = "localhost";
-            string database = "banktransaction";
-            string username = "root";
-            string password = "";
+            static MySqlConnection databaseConnection = null;
+            public static MySqlConnection GetDBConnection()
+            {
+                if (databaseConnection == null)
+                {
+                string connectionString = ConfigurationManager.ConnectionStrings["MysqlDatabaseConnection"].ConnectionString;
+                    databaseConnection = new MySqlConnection(connectionString);
+                }
+                return databaseConnection;
+            }
 
-            String connString = "Server=" + host + ";Database=" + database
-                + ";User Id=" + username + ";password=" + password;
-            
-            MySqlConnection conn = new MySqlConnection(connString);
-
-            return conn;
-        }
     }
 }
